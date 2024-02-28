@@ -1,12 +1,11 @@
-const loadPhone = async () => {
+const loadPhone = async (searchText) => {
   const res = await fetch(
-    "https://openapi.programming-hero.com/api/phones?search=iphone"
+    `https://openapi.programming-hero.com/api/phones?search=${searchText}`
   );
   const data = await res.json();
   const phones = data.data;
   displayPhones(phones);
 };
-
 
 //phone gulo dekhaite chai ejonno ei function create korlam
 const displayPhones = (phones) => {
@@ -15,13 +14,18 @@ const displayPhones = (phones) => {
   //# step:1 kothai bosabo setaar jonno loop er baire create kori
 
   const phoneContainer = document.getElementById("phone-container");
+
+  //clear container cards before adding new cards 
+
+  phoneContainer.textContent='';
+
   phones.forEach((phone) => {
-    console.log(phone);
+    // console.log(phone);
 
     //# STEP:2 create a div
     const phoneCard = document.createElement("div");
-    phoneCard.classList = `card w-96 bg-gray-100 shadow-xl`;
-    //# Step:3 set inner 
+    phoneCard.classList = `card p-4 bg-gray-100 shadow-xl`;
+    //# Step:3 set inner
     phoneCard.innerHTML = `<figure>
               <img
                 src="${phone.image}"
@@ -36,10 +40,19 @@ const displayPhones = (phones) => {
               </div>
             </div>`;
 
-            //#step:4 append
+    //#step:4 append
 
-            phoneContainer.appendChild(phoneCard);
-
+    phoneContainer.appendChild(phoneCard);
   });
 };
-loadPhone();
+// loadPhone();
+
+//handle search button
+
+const handleSearch = () => {
+  console.log("Clicked");
+  const searchField = document.getElementById("search-field");
+  const searchText = searchField.value; //input field so value
+  console.log(searchText);
+  loadPhone(searchText)
+};

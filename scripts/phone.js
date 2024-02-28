@@ -1,4 +1,4 @@
-const loadPhone = async (searchText, isShowAll) => {
+const loadPhone = async (searchText = "13", isShowAll) => {
   const res = await fetch(
     `https://openapi.programming-hero.com/api/phones?search=${searchText}`
   );
@@ -26,7 +26,7 @@ const displayPhones = (phones, isShowAll) => {
   } else {
     showAllContainer.classList.add("hidden");
   }
-  console.log("is show all", isShowAll);
+  // console.log("is show all", isShowAll);
   //display only first 12 phones if not show all
 
   if (!isShowAll) {
@@ -61,17 +61,16 @@ const displayPhones = (phones, isShowAll) => {
   //hide loading spinner
   toggleLoadingSpinner(false);
 };
-// loadPhone();
 
 //handle search button
 
 const handleSearch = (isShowAll) => {
   toggleLoadingSpinner(true);
 
-  console.log("Clicked");
+  // console.log("Clicked");
   const searchField = document.getElementById("search-field");
   const searchText = searchField.value; //input field so value
-  console.log(searchText);
+  // console.log(searchText);
   loadPhone(searchText, isShowAll);
 };
 //handle search recap
@@ -105,5 +104,37 @@ const handleShowDetail = async (id) => {
     `https://openapi.programming-hero.com/api/phone/${id}`
   );
   const data = await res.json();
-  console.log(data);
+
+  const phone = data.data;
+
+  showPhoneDetails(phone);
 };
+
+//display \
+
+const showPhoneDetails = (phone) => {
+  console.log(phone);
+  //show the modal
+  show_details_modal.showModal();
+  const phoneName = document.getElementById("show-detail-phone-name");
+  phoneName.innerText=phone.name;
+  const showDetailContainer = document.getElementById("show-detail-container");
+  showDetailContainer.innerHTML = `
+
+  <img src="${phone.image}">
+  <p><span>Brand: </span>${phone?.brand}</p>
+
+  <p><span>Storage: </span>${phone?.mainFeatures?.storage}</p>
+  <p><span>Processor: </span>${phone?.mainFeatures?.chipSet}</p>
+  <p><span>Sensor: </span>${phone?.mainFeatures?.sensors}</p>
+  <p><span>Memory: </span>${phone?.mainFeatures?.memory}</p>
+  <p><span>Display: </span>${phone?.mainFeatures?.displaySize}</p>
+  <p><span>Release Date: </span>${phone?.releaseDate}</p>
+  <p><span>Model: </span>${phone?.slug}</p>
+
+
+
+  `;
+};
+
+loadPhone();

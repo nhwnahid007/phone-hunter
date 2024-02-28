@@ -4,11 +4,11 @@ const loadPhone = async (searchText, isShowAll) => {
   );
   const data = await res.json();
   const phones = data.data;
-  displayPhones(phones,isShowAll);
+  displayPhones(phones, isShowAll);
 };
 
 //phone gulo dekhaite chai ejonno ei function create korlam
-const displayPhones = (phones,isShowAll) => {
+const displayPhones = (phones, isShowAll) => {
   // console.log(phones);
 
   //# step:1 kothai bosabo setaar jonno loop er baire create kori
@@ -21,17 +21,16 @@ const displayPhones = (phones,isShowAll) => {
 
   //display show button if there are more than 12 phones
   const showAllContainer = document.getElementById("show-all-container");
-  if (phones.length > 12 && !isShowAll ) {
+  if (phones.length > 12 && !isShowAll) {
     showAllContainer.classList.remove("hidden");
   } else {
     showAllContainer.classList.add("hidden");
   }
-  console.log('is show all',isShowAll);
+  console.log("is show all", isShowAll);
   //display only first 12 phones if not show all
 
   if (!isShowAll) {
     phones = phones.slice(0, 12);
-    
   }
 
   phones.forEach((phone) => {
@@ -50,8 +49,8 @@ const displayPhones = (phones,isShowAll) => {
             <div class="card-body">
               <h2 class="card-title">${phone.phone_name}</h2>
               <p>If a dog chews shoes whose shoes does he choose?</p>
-              <div class="card-actions justify-end">
-                <button class="btn btn-primary">Buy Now</button>
+              <div class="card-actions justify-center">
+                <button onclick="handleShowDetail('${phone.slug}')" class="btn btn-primary">Show details</button>
               </div>
             </div>`;
 
@@ -97,4 +96,14 @@ const toggleLoadingSpinner = (isLoading) => {
 
 const handleShowAll = () => {
   handleSearch(true);
+};
+
+const handleShowDetail = async (id) => {
+  console.log("Clicked show details", id);
+  //load single phone data
+  const res = await fetch(
+    `https://openapi.programming-hero.com/api/phone/${id}`
+  );
+  const data = await res.json();
+  console.log(data);
 };
